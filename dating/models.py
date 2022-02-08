@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+from dating.utils.watermark import create_watermark
+
 
 class MyClientManager(BaseUserManager):
     def _create_user(self, email, password=None, **extra_fields):
@@ -45,6 +47,18 @@ class Client(AbstractBaseUser):
 
     objects = MyClientManager()
     USERNAME_FIELD = 'email'
+
+    def save(self, *args, **kwargs):
+        if self.avatar:
+            avatar_with_watermark = create_watermark(self.avatar)
+            temp_name = self.avatar.name
+
+            self.avatar.save(
+                temp_name,
+                content=avatar_with_watermark,
+                save=False
+            )
+            super(Client, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.email
