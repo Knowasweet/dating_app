@@ -21,7 +21,7 @@ class ClientFilter(FilterSet):
         if value:
             queryset = Client.objects.filter(~Q(id=client.id) & ~Q(latitude=None) & ~Q(longitude=None))
             for client in queryset:
-                if get_great_circle_distance(client_latitude, client_longitude, client.latitude, client.longitude,
+                if get_great_circle_distance((client_latitude, client_longitude), (client.latitude, client.longitude),
                                              distance):
                     clients_filtered_by_distance.append(client.id)
         return Client.objects.filter(id__in=clients_filtered_by_distance)

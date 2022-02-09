@@ -2,6 +2,10 @@
 
 The project contains 6 tasks with the functionality of the dating app.
 
+The project is deployed using the Heroku service and is available at: 
+
+https://django-dating-app.herokuapp.com/
+
 ## Technical stack, technologies
 
 - Python 3.10
@@ -82,7 +86,7 @@ GET /api/list
 
 **Response**
 
-List os Client. Client model:
+List of Client. Client model:
 
 | Name      | Type    | Description               |
 |-----------|---------|---------------------------|
