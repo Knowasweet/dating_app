@@ -65,3 +65,5 @@ class ClientListView(viewsets.ModelViewSet):
     serializer_class = ClientListSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ClientFilter
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)

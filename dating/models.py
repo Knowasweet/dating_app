@@ -42,9 +42,11 @@ class Client(AbstractBaseUser):
     gender = models.CharField(max_length=1, choices=gender_choices, verbose_name='Пол',
                               help_text='Введите m(male) или f(female)', )
     avatar = models.ImageField(upload_to='avatars/%Y/%m/%d/', verbose_name='Аватарка')
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True, verbose_name='Долгота')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True, verbose_name='Широта')
+
     is_superuser = models.BooleanField(default=False, help_text='У этого пользователя есть все разрешения',
                                        verbose_name='Суперпользователь')
-
     objects = MyClientManager()
     USERNAME_FIELD = 'email'
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Client, Sympathy
+from decimal import Decimal
 
 
 class ClientRegistrationSerializer(serializers.ModelSerializer):
@@ -10,6 +11,17 @@ class ClientRegistrationSerializer(serializers.ModelSerializer):
         model = Client
         fields = '__all__'
 
+    def validate(self, attrs):
+        if not (-90 < Decimal(self.initial_data['latitude']) < 90):
+            raise serializers.ValidationError({'error': 'Широта не может быть меньше -90 и больше 90'})
+        if not (-180 < Decimal(self.initial_data['longitude']) < 180):
+            raise serializers.ValidationError({'error': 'Долгота не может быть меньше -180 и больше 180'})
+        if not self.initial_data['name'].isalpha():
+            raise serializers.ValidationError({'error': 'Имя должно состоять только из букв'})
+        if not self.initial_data['surname'].isalpha():
+            raise serializers.ValidationError({'error': 'Фамилия должна состоять только из букв'})
+        return attrs
+
     def create(self, validated_data):
         client = Client.objects.create_user(
             email=validated_data.get('email'),
@@ -18,6 +30,8 @@ class ClientRegistrationSerializer(serializers.ModelSerializer):
             surname=validated_data.get('surname'),
             gender=validated_data.get('gender'),
             avatar=validated_data.get('avatar'),
+            longitude=validated_data.get('longitude'),
+            latitude=validated_data.get('latitude'),
         )
         return client
 
@@ -49,4 +63,4 @@ class ClientMatchSerializer(serializers.ModelSerializer):
 class ClientListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('email', 'name', 'surname', 'gender', 'avatar',)
+        fields = ('email', 'name', 'surname', 'gender', 'avatar', 'longitude', 'latitude',)
