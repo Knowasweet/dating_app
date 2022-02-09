@@ -66,3 +66,8 @@ class Client(AbstractBaseUser):
     class Meta:
         verbose_name = 'Участник'
         verbose_name_plural = 'Участники'
+
+
+class Sympathy(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.PROTECT, null=True, related_name='client')
+    client_liked = models.ForeignKey(Client, on_delete=models.PROTECT, null=True, related_name='client_liked')

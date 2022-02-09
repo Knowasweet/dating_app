@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Client
+from .models import Client, Sympathy
 
 
 class ClientRegistrationSerializer(serializers.ModelSerializer):
@@ -20,3 +20,27 @@ class ClientRegistrationSerializer(serializers.ModelSerializer):
             avatar=validated_data.get('avatar'),
         )
         return client
+
+
+class ClientMatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('id',)
+
+    def validate(self, attrs):
+        client_liked_id = self.initial_data['client_liked_id']
+        client_id = self.initial_data['client_id']
+        if not Client.objects.filter(pk=client_liked_id).exists():
+            raise serializers.ValidationError({'error': 'Клиент не существует'})
+        if client_id == client_liked_id:
+            raise serializers.ValidationError({'error': 'Нельзя выбрать самого себя'})
+        if Sympathy.objects.filter(client_id=client_id, client_liked_id=client_liked_id).exists():
+            raise serializers.ValidationError({'error': 'Вы проявили уже симпатию'})
+        return attrs
+
+    def create(self, validated_data):
+        sympathy = Sympathy.objects.create(
+            client_id=self.initial_data['client_id'],
+            client_liked_id=self.initial_data['client_liked_id']
+        )
+        return sympathy

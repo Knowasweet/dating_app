@@ -128,5 +128,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
 }
+
+# EMAIL CONFIG
+EMAIL_FROM_USER = 'djangotestingforme@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'djangotestingforme@gmail.com'
+EMAIL_HOST_PASSWORD = '183729Aa'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
