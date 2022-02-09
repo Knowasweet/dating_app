@@ -44,3 +44,9 @@ class ClientMatchSerializer(serializers.ModelSerializer):
             client_liked_id=self.initial_data['client_liked_id']
         )
         return sympathy
+
+
+class ClientListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('email', 'name', 'surname', 'gender', 'avatar',)

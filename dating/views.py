@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import ClientRegistrationSerializer, ClientMatchSerializer
+from .filters import ClientFilter
+from .serializers import ClientRegistrationSerializer, ClientMatchSerializer, ClientListSerializer
 from rest_framework import viewsets
 from .models import Client, Sympathy
 from rest_framework.authtoken.models import Token
@@ -8,6 +9,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class ClientRegistrationView(viewsets.ModelViewSet):
@@ -56,3 +58,10 @@ class ClientMatchView(viewsets.ModelViewSet):
             return Response({'success': 'True',
                              'message': 'Вы проявили симпатию. Вас оповестят в почте, если возникнет взаимная симпатия'},
                             status=status.HTTP_200_OK, headers=headers)
+
+
+class ClientListView(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientListSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ClientFilter
